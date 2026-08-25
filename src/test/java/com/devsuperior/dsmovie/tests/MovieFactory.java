@@ -10,6 +10,14 @@ public class MovieFactory {
 		return movie;
 	}
 	
+	public static MovieEntity createCustomMovie(Long id, String title) {
+		// Sobrecarga para quando voce precisar testar IDs inexistentes ou titulos especificos
+		MovieEntity movie = createMovieEntity();
+		movie.setId(id);
+		movie.setTitle(title);
+		return movie;
+	}
+	
 	public static MovieDTO createMovieDTO() {
 		MovieEntity movie = createMovieEntity();
 		return new MovieDTO(movie);

@@ -1,6 +1,5 @@
 package com.devsuperior.dsmovie.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +17,12 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class MovieService {
 
-	@Autowired
-	private MovieRepository repository;
+	//@Autowired
+	private final MovieRepository repository;
+	
+	public MovieService(MovieRepository repository) {
+		this.repository = repository;
+	}
 
 	@Transactional(readOnly = true)
 	public Page<MovieDTO> findAll(String title, Pageable pageable) {
