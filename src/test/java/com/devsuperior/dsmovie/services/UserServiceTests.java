@@ -68,6 +68,9 @@ public class UserServiceTests {
 		
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getUsername(), existingUsername);
+		
+		Mockito.verify(userUtil, Mockito.times(1)).getLoggedUsername();
+		Mockito.verify(repository, Mockito.times(1)).findByUsername(existingUsername);
 	}
 
 	@Test
@@ -79,6 +82,8 @@ public class UserServiceTests {
 			
 			service.authenticated();
 		});
+		
+		Mockito.verify(repository, Mockito.never()).findByUsername(nonExistingUsername);
 	}
 
 	@Test
@@ -88,6 +93,8 @@ public class UserServiceTests {
 		
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(result.getUsername(), existingUsername);
+		
+		Mockito.verify(repository, Mockito.times(1)).searchUserAndRolesByUsername(existingUsername);
 	}
 
 	@Test
@@ -97,5 +104,7 @@ public class UserServiceTests {
 			
 			service.loadUserByUsername(nonExistingUsername);
 		});
+		
+		Mockito.verify(repository, Mockito.times(1)).searchUserAndRolesByUsername(nonExistingUsername);
 	}
 }
