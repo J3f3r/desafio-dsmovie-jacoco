@@ -1,6 +1,5 @@
 package com.devsuperior.dsmovie.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +15,20 @@ import com.devsuperior.dsmovie.services.exceptions.ResourceNotFoundException;
 @Service
 public class ScoreService {
 
-	@Autowired
-	private UserService userService;
+	//@Autowired
+	private final UserService userService;
 	
-	@Autowired
-	private MovieRepository movieRepository;
+	//@Autowired
+	private final MovieRepository movieRepository;
 	
-	@Autowired
-	private ScoreRepository scoreRepository;
+	//@Autowired
+	private final ScoreRepository scoreRepository;
+	
+	public ScoreService(UserService userService, MovieRepository movieRepository, ScoreRepository scoreRepository) {
+		this.userService = userService;
+		this.movieRepository = movieRepository;
+		this.scoreRepository = scoreRepository;
+	}
 	
 	@Transactional
 	public MovieDTO saveScore(ScoreDTO dto) {
@@ -38,8 +43,11 @@ public class ScoreService {
 		score.setUser(user);
 		score.setValue(dto.getScore());
 		
+		// Grava e forca a sincronizacao imediata (flush) dessa nova nota na tabela de pontuacoes no banco de dados
 		score = scoreRepository.saveAndFlush(score);
 		
+		
+		// Percorre todas as notas cadastradas na lista de avaliações desse filme (movie.getScores()), soma todas as notas e divide pela quantidade total de avaliacoes, achando a media (avg
 		double sum = 0.0;
 		for (ScoreEntity s : movie.getScores()) {
 			sum = sum + s.getValue();

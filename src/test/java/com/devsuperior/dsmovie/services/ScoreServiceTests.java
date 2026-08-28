@@ -82,6 +82,10 @@ public class ScoreServiceTests {
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(movie.getId(), result.getId());
 		Assertions.assertEquals(movie.getTitle(), result.getTitle());
+		
+		//Verifica se os repositórios foram chamados para salvar o score e o filme
+		Mockito.verify(repository, Mockito.times(1)).saveAndFlush(any());
+		Mockito.verify(movieRepository, Mockito.times(1)).save(any());
 	}
 	
 	@Test
