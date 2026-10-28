@@ -1,5 +1,6 @@
 package com.devsuperior.dsmovie.controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,7 +41,7 @@ public class ScoreController {
 			}
 	)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-	@PutMapping(produces = "application/json")
+	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MovieDTO> saveScore(@Valid @RequestBody ScoreDTO dto) {
 		MovieDTO movieDTO = service.saveScore(dto);
 		return ResponseEntity.ok().body(movieDTO);
