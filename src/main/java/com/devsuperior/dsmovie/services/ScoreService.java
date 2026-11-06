@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dsmovie.dto.MovieDTO;
+import com.devsuperior.dsmovie.dto.MovieV1DTO;
 import com.devsuperior.dsmovie.dto.ScoreDTO;
 import com.devsuperior.dsmovie.entities.MovieEntity;
 import com.devsuperior.dsmovie.entities.ScoreEntity;
@@ -61,5 +62,34 @@ public class ScoreService {
 		movie = movieRepository.save(movie);
 		
 		return new MovieDTO(movie);
+	}
+	
+	@Transactional
+	public MovieV1DTO saveScoreV1(ScoreDTO dto) {
+		UserEntity user = userService.authenticated();
+		
+		MovieEntity movie = movieRepository.findById(dto.getMovieId())
+				.orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));		
+		
+		ScoreEntity score = new ScoreEntity();
+		score.setMovie(movie);
+		score.setUser(user);
+		score.setValue(dto.getScore());
+		
+		score = scoreRepository.saveAndFlush(score);
+		
+		double sum = 0.0;
+		for (ScoreEntity s : movie.getScores()) {
+			sum = sum + s.getValue();
+		}
+			
+		double avg = sum / movie.getScores().size();
+		
+		movie.setScore(avg);
+		movie.setCount(movie.getScores().size());
+		
+		movie = movieRepository.save(movie);
+		
+		return new MovieV1DTO(movie); // Retorna o DTO puro da versão v1
 	}
 }

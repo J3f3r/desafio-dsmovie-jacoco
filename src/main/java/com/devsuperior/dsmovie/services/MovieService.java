@@ -13,6 +13,7 @@ import com.devsuperior.dsmovie.controllers.MovieController;
 import com.devsuperior.dsmovie.controllers.MovieControllerV1;
 import com.devsuperior.dsmovie.dto.MovieDTO;
 import com.devsuperior.dsmovie.dto.MovieGenreDTO;
+import com.devsuperior.dsmovie.dto.MovieV1DTO;
 import com.devsuperior.dsmovie.entities.MovieEntity;
 import com.devsuperior.dsmovie.repositories.MovieRepository;
 import com.devsuperior.dsmovie.services.exceptions.DatabaseException;
@@ -67,6 +68,13 @@ public class MovieService {
 		        .add(linkTo(methodOn(MovieControllerV1.class).delete(id)).withRel("Delete movie"));
 		return dto;
 	}
+	
+	@Transactional(readOnly = true)
+	public MovieV1DTO findByIdV1(Long id) {// DTO puro para evitar conflito entre hateoas e jackson
+		MovieEntity result = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
+		return new MovieV1DTO(result);
+	}
 
 	@Transactional
 	public MovieDTO insert(MovieDTO dto) {
@@ -82,6 +90,14 @@ public class MovieService {
 		copyDtoToEntity(dto, entity);
 		entity = repository.save(entity);
 		return new MovieGenreDTO(entity).add(linkTo(methodOn(MovieControllerV1.class).findById(entity.getId())).withRel("Get movie by id"));
+	}
+	
+	@Transactional
+	public MovieV1DTO insertV1(MovieV1DTO dto) {// DTO puro para evitar conflito entre hateoas e jackson
+		MovieEntity entity = new MovieEntity();
+		copyDtoToEntity(dto, entity);
+		entity = repository.save(entity);
+		return new MovieV1DTO(entity);
 	}
 
 	@Transactional
@@ -105,6 +121,18 @@ public class MovieService {
 			return new MovieGenreDTO(entity).add(linkTo(methodOn(MovieControllerV1.class).findById(entity.getId())).withRel("Get movie by id"));
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Recurso não encontrado");
+		}
+	}
+	
+	@Transactional
+	public MovieV1DTO updateV1(Long id, MovieV1DTO dto) {// DTO puro para evitar conflito entre hateoas e jackson
+		try {
+			MovieEntity entity = repository.getReferenceById(id);
+			copyDtoToEntity(dto, entity);
+			entity = repository.save(entity);
+			return new MovieV1DTO(entity);
+		} catch (jakarta.persistence.EntityNotFoundException e) {
+			throw new com.devsuperior.dsmovie.services.exceptions.ResourceNotFoundException("Recurso não encontrado");
 		}
 	}
 
@@ -132,5 +160,19 @@ public class MovieService {
 		entity.setImage(dto.getImage());
 		// Aqui você também fará a atribuição do gênero à entidade, conforme o mapeamento do seu projeto:
 		// entity.setGenre(...);
+	}
+	
+	private void copyDtoToEntity(MovieV1DTO dto, MovieEntity entity) {
+		entity.setTitle(dto.getTitle());
+		entity.setScore(dto.getScore());
+		entity.setCount(dto.getCount());
+		entity.setImage(dto.getImage());
+		
+		// Associa o gênero utilizando o ID enviado no DTO, sem precisar de um GenreRepository
+		if (dto.getGenreId() != null) {
+			com.devsuperior.dsmovie.entities.Genre genre = new com.devsuperior.dsmovie.entities.Genre();
+			genre.setId(dto.getGenreId());
+			entity.setGenre(genre);
+		}
 	}
 }

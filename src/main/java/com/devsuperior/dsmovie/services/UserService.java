@@ -2,7 +2,6 @@ package com.devsuperior.dsmovie.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,11 +16,14 @@ import com.devsuperior.dsmovie.utils.CustomUserUtil;
 @Service
 public class UserService implements UserDetailsService {
 
-	@Autowired
-	private UserRepository repository;
+	private final UserRepository repository;
 	
-	@Autowired
-	private CustomUserUtil userUtil;
+	private final CustomUserUtil userUtil;
+
+	UserService(UserRepository repository, CustomUserUtil userUtil) {
+		this.repository = repository;
+		this.userUtil = userUtil;
+	}
 
 	public UserEntity authenticated() {
 		try {
