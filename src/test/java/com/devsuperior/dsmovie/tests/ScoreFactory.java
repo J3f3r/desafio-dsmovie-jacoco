@@ -25,4 +25,5 @@ public class ScoreFactory {
 		ScoreEntity score = createScoreEntity();
 		return new ScoreDTO(score.getId().getMovie().getId(), score.getValue());
 	}
+
 }

@@ -43,7 +43,7 @@ public class MovieService {
 		Page<MovieEntity> result = repository.searchByTitle(title, pageable);
 		return result.map(x -> new MovieGenreDTO(x).add(linkTo(methodOn(MovieController.class).findAll(title, pageable)).withSelfRel())
 					.add(linkTo(methodOn(MovieController.class).findById(x.getId())).withRel("Get movie by id")));
-	}
+	}// nao precisa de v1 pois nao sofre alteracao com hateoa como os demais
 
 	@Transactional(readOnly = true)
 	public MovieDTO findById(Long id) {
@@ -141,6 +141,7 @@ public class MovieService {
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		try {
 			repository.deleteById(id);
+			repository.flush(); // Força o Hibernate a executar o SQL imediatamente e disparar a violação de integridade no H2
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException("Falha de integridade referencial");
 		}

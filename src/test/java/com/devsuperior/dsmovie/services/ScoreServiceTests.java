@@ -99,4 +99,16 @@ public class ScoreServiceTests {
 			service.saveScore(nonExistingScoreDTO);
 		});
 	}
+	
+	@Test // Teste para o fluxo V1 do Score
+	public void saveScoreV1ShouldReturnMovieDTOWhenValidData() {
+		// Ajuste a chamada conforme o método V1 existente no seu ScoreService (ex: saveScoreV1)
+		MovieDTO result = service.saveScore(scoreDTO); 
+
+		Assertions.assertNotNull(result);
+		Assertions.assertEquals(movie.getId(), result.getId());
+
+		Mockito.verify(repository, Mockito.times(1)).saveAndFlush(any());
+		Mockito.verify(movieRepository, Mockito.times(1)).save(any());
+	}
 }

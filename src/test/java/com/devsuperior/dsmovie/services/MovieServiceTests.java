@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.devsuperior.dsmovie.dto.MovieDTO;
+import com.devsuperior.dsmovie.dto.MovieV1DTO;
 import com.devsuperior.dsmovie.entities.MovieEntity;
 import com.devsuperior.dsmovie.repositories.MovieRepository;
 import com.devsuperior.dsmovie.services.exceptions.DatabaseException;
@@ -111,6 +112,18 @@ public class MovieServiceTests {
 			service.findById(nonExistingMovieId);
 		});
 	}
+	
+	@Test// V1 dto puro
+	public void findByIdV1ShouldReturnMovieV1DTOWhenIdExists() {
+		MovieEntity movie = MovieFactory.createMovieEntity();
+		Mockito.when(repository.findById(1L)).thenReturn(Optional.of(movie));
+		
+		MovieV1DTO result = service.findByIdV1(1L);
+		
+		Assertions.assertNotNull(result);
+		Assertions.assertEquals(movie.getId(), result.getId());
+		Assertions.assertEquals(movie.getTitle(), result.getTitle());
+	}
 
 	@Test
 	public void insertShouldReturnMovieDTO() {
@@ -122,6 +135,19 @@ public class MovieServiceTests {
 
 		// Verifica se o save do repository foi invocado 1 vez
 		Mockito.verify(repository, Mockito.times(1)).save(any());
+	}
+	
+	@Test// V1
+	public void insertV1ShouldReturnMovieV1DTOWhenValidData() {
+		MovieV1DTO v1Dto = MovieFactory.createMovieV1DTO();
+		MovieEntity movie = MovieFactory.createMovieEntity();
+		
+		Mockito.when(repository.save(Mockito.any())).thenReturn(movie);
+		
+		MovieV1DTO result = service.insertV1(v1Dto);
+		
+		Assertions.assertNotNull(result);
+		Mockito.verify(repository, Mockito.times(1)).save(Mockito.any());
 	}
 
 	@Test
