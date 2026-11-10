@@ -159,9 +159,35 @@ public class MovieService {
 		entity.setScore(dto.getScore());
 		entity.setCount(dto.getCount());
 		entity.setImage(dto.getImage());
-		// Aqui você também fará a atribuição do gênero à entidade, conforme o mapeamento do seu projeto:
-		// entity.setGenre(...);
+		
+		// Associa o gênero utilizando o ID 1L ('Ação' do import.sql) para evitar nulos
+		com.devsuperior.dsmovie.entities.Genre genre = new com.devsuperior.dsmovie.entities.Genre();
+		genre.setId(1L);
+		entity.setGenre(genre);
 	}
+	
+//	private void copyDtoToEntity(MovieGenreDTO dto, MovieEntity entity) {
+//		entity.setTitle(dto.getTitle());
+//		entity.setScore(dto.getScore());
+//		entity.setCount(dto.getCount());
+//		entity.setImage(dto.getImage());
+//		// Aqui você também fará a atribuição do gênero à entidade, conforme o mapeamento do seu projeto:
+//		// entity.setGenre(...);
+//	}
+	
+//	private void copyDtoToEntity(MovieV1DTO dto, MovieEntity entity) {
+//		entity.setTitle(dto.getTitle());
+//		entity.setScore(dto.getScore());
+//		entity.setCount(dto.getCount());
+//		entity.setImage(dto.getImage());
+//		
+//		// Associa o gênero utilizando o ID enviado no DTO, sem precisar de um GenreRepository
+//		if (dto.getGenreId() != null) {
+//			com.devsuperior.dsmovie.entities.Genre genre = new com.devsuperior.dsmovie.entities.Genre();
+//			genre.setId(dto.getGenreId());
+//			entity.setGenre(genre);
+//		}
+//	}
 	
 	private void copyDtoToEntity(MovieV1DTO dto, MovieEntity entity) {
 		entity.setTitle(dto.getTitle());
@@ -169,11 +195,13 @@ public class MovieService {
 		entity.setCount(dto.getCount());
 		entity.setImage(dto.getImage());
 		
-		// Associa o gênero utilizando o ID enviado no DTO, sem precisar de um GenreRepository
-		if (dto.getGenreId() != null) {
-			com.devsuperior.dsmovie.entities.Genre genre = new com.devsuperior.dsmovie.entities.Genre();
-			genre.setId(dto.getGenreId());
-			entity.setGenre(genre);
-		}
+		// Cria e associa o objeto Genre garantindo que nunca fique nulo
+		com.devsuperior.dsmovie.entities.Genre genre = new com.devsuperior.dsmovie.entities.Genre();
+		
+		// Se o DTO trouxer um genreId válido, usa ele; caso contrário, assume o ID 1 ('Ação') do import.sql
+		Long genreId = (dto.getGenreId() != null) ? dto.getGenreId() : 1L;
+		
+		genre.setId(genreId);
+		entity.setGenre(genre);
 	}
 }
