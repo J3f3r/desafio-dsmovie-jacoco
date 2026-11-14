@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.devsuperior.dsmovie.dto.MovieDTO;
+import com.devsuperior.dsmovie.dto.MovieV1DTO;
 import com.devsuperior.dsmovie.dto.ScoreDTO;
 import com.devsuperior.dsmovie.entities.MovieEntity;
 import com.devsuperior.dsmovie.entities.ScoreEntity;
@@ -110,5 +111,19 @@ public class ScoreServiceTests {
 
 		Mockito.verify(repository, Mockito.times(1)).saveAndFlush(any());
 		Mockito.verify(movieRepository, Mockito.times(1)).save(any());
+	}
+	
+	@Test
+	public void saveScoreV1ShouldReturnMovieV1DTOWhenValidIdExists() {
+		ScoreDTO scoreDTO = new ScoreDTO(existingMovieId, 4.0);
+		
+		MovieV1DTO result = service.saveScoreV1(scoreDTO);
+		
+		Assertions.assertNotNull(result);
+		Assertions.assertEquals(existingMovieId, result.getId());
+		Mockito.verify(userService, Mockito.times(1)).authenticated();
+		Mockito.verify(movieRepository, Mockito.times(1)).findById(existingMovieId);
+		Mockito.verify(repository, Mockito.times(1)).saveAndFlush(Mockito.any(ScoreEntity.class));
+		Mockito.verify(movieRepository, Mockito.times(1)).save(Mockito.any(MovieEntity.class));
 	}
 }

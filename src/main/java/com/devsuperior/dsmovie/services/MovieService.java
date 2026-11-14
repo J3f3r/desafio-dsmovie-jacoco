@@ -51,9 +51,9 @@ public class MovieService {
 				.orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
 		MovieDTO dto = new MovieDTO(result)
 				.add(linkTo(methodOn(MovieController.class).findById(id)).withSelfRel())
-		        .add(linkTo(methodOn(MovieController.class).findAll("", Pageable.unpaged())).withRel("All movies"))
-		        .add(linkTo(methodOn(MovieController.class).update(id, new MovieDTO())).withRel("Update movie"))
-		        .add(linkTo(methodOn(MovieController.class).delete(id)).withRel("Delete movie"));
+				.add(linkTo(methodOn(MovieController.class).findAll("", Pageable.unpaged())).withRel("All movies"))
+				.add(linkTo(methodOn(MovieController.class).update(id, new MovieDTO())).withRel("Update movie"))
+				.add(linkTo(methodOn(MovieController.class).delete(id)).withRel("Delete movie"));
 		return dto;
 	}
 	
@@ -63,9 +63,9 @@ public class MovieService {
 				.orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
 		MovieGenreDTO dto = new MovieGenreDTO(result)
 				.add(linkTo(methodOn(MovieControllerV1.class).findById(id)).withSelfRel())
-		        .add(linkTo(methodOn(MovieControllerV1.class).findAll("", Pageable.unpaged())).withRel("All movies"))
-		        .add(linkTo(methodOn(MovieControllerV1.class).update(id, new MovieGenreDTO())).withRel("Update movie"))
-		        .add(linkTo(methodOn(MovieControllerV1.class).delete(id)).withRel("Delete movie"));
+				.add(linkTo(methodOn(MovieControllerV1.class).findAll("", Pageable.unpaged())).withRel("All movies"))
+				.add(linkTo(methodOn(MovieControllerV1.class).update(id, new MovieGenreDTO())).withRel("Update movie"))
+				.add(linkTo(methodOn(MovieControllerV1.class).delete(id)).withRel("Delete movie"));
 		return dto;
 	}
 	
@@ -166,28 +166,6 @@ public class MovieService {
 		entity.setGenre(genre);
 	}
 	
-//	private void copyDtoToEntity(MovieGenreDTO dto, MovieEntity entity) {
-//		entity.setTitle(dto.getTitle());
-//		entity.setScore(dto.getScore());
-//		entity.setCount(dto.getCount());
-//		entity.setImage(dto.getImage());
-//		// Aqui você também fará a atribuição do gênero à entidade, conforme o mapeamento do seu projeto:
-//		// entity.setGenre(...);
-//	}
-	
-//	private void copyDtoToEntity(MovieV1DTO dto, MovieEntity entity) {
-//		entity.setTitle(dto.getTitle());
-//		entity.setScore(dto.getScore());
-//		entity.setCount(dto.getCount());
-//		entity.setImage(dto.getImage());
-//		
-//		// Associa o gênero utilizando o ID enviado no DTO, sem precisar de um GenreRepository
-//		if (dto.getGenreId() != null) {
-//			com.devsuperior.dsmovie.entities.Genre genre = new com.devsuperior.dsmovie.entities.Genre();
-//			genre.setId(dto.getGenreId());
-//			entity.setGenre(genre);
-//		}
-//	}
 	
 	private void copyDtoToEntity(MovieV1DTO dto, MovieEntity entity) {
 		entity.setTitle(dto.getTitle());
