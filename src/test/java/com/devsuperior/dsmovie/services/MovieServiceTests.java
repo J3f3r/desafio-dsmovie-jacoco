@@ -129,6 +129,24 @@ public class MovieServiceTests {
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(existingMovieId, result.getId());
 	}
+	
+	@Test// cobre os cénarios lambda
+	public void findByIdV1ShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+		Mockito.when(repository.findById(nonExistingMovieId)).thenReturn(Optional.empty());
+
+		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+			service.findByIdV1(nonExistingMovieId);
+		});
+	}
+
+	@Test// cobre os cénarios lambda
+	public void findByIdMovieGenreShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+		Mockito.when(repository.findById(nonExistingMovieId)).thenReturn(Optional.empty());
+
+		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+			service.findByIdMovieGenre(nonExistingMovieId);
+		});
+	}
 
 	@Test
 	public void insertShouldReturnMovieDTO() {

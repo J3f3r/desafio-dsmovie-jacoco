@@ -126,4 +126,15 @@ public class ScoreServiceTests {
 		Mockito.verify(repository, Mockito.times(1)).saveAndFlush(Mockito.any(ScoreEntity.class));
 		Mockito.verify(movieRepository, Mockito.times(1)).save(Mockito.any(MovieEntity.class));
 	}
+	
+	// Novo teste para cobrir o fluxo negativo (lambda .orElseThrow) do saveScoreV1
+		@Test
+		public void saveScoreV1ShouldThrowResourceNotFoundExceptionWhenNonExistingMovieId() {
+			ScoreDTO nonExistingScoreDTO = new ScoreDTO(nonExistingMovieId, 4.5);
+			
+			//Garante que a exceção é lançada ao tentar salvar um score com ID de filme inexistente via V1
+			Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+				service.saveScoreV1(nonExistingScoreDTO);
+			});
+		}
 }

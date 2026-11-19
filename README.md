@@ -55,10 +55,10 @@ A análise de cobertura guiou a criação de novos testes. Ao revisar o relatór
 
 > **Nota:** cobertura mede o código que foi executado pelos testes, não a qualidade das asserções. Por isso os testes verificam também os resultados e as interações, e não apenas passam pelas linhas.
 
-<!-- TODO: adicione os prints em docs/ (ex.: docs/jacoco-total.png com a linha "Total" do index.html do projeto
-     e docs/jacoco-movieservice.png) e referencie aqui:
-     ![Relatório JaCoCo](docs/jacoco-total.png)
-     Confirme também o caminho real do relatório (no seu print: target/jacoco-report/index.html). -->
+<img src="docs/cobertura-jacoco.png" alt="Cobertura de testes com JaCoCo" width="700" />
+
+
+   Relatório JaCoCo (docs/jacoco-total.png)   (dsmovie/target/jacocoreport/index.html)
 
 **Como gerar o relatório:**
 
