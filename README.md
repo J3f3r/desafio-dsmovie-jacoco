@@ -144,6 +144,14 @@ cd desafio-dsmovie-jacoco
 
 ---
 
+---
+
+## ✨ Próximos Passos
+
+* **Deploy:** preparar o `Dockerfile` para ambiente de produção.
+* **Testes:** ampliar os testes de API e recompor a cobertura do JaCoCo após os novos incrementos.
+
+---
 ## 👤 Autor
 
 **Jeferson Martins** - Desenvolvedor Backend Java Júnior
